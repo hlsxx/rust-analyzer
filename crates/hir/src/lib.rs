@@ -4261,7 +4261,10 @@ impl<'db> ClosureCapture<'db> {
                         TyKind::Adt(adt_def, _) => {
                             let variant = match adt_def.def_id() {
                                 AdtId::StructId(id) => VariantId::from(id),
-                                AdtId::UnionId(id) => id.into(),
+                                AdtId::UnionId(id) => {
+                                    tracing::error!("UNION ID {:?}", id);
+                                    id.into()
+                                }
                                 AdtId::EnumId(id) => {
                                     // Can't really do that for an enum, unfortunately, so try to do something alike.
                                     id.enum_variants(db).variants[variant_idx as usize].0.into()
